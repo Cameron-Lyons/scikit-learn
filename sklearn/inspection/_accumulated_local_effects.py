@@ -110,6 +110,11 @@ def _calculate_accumulated_local_effects(est, grid, features, X, response_method
     y_hat = prediction_method(X_eval)
     y_hat_2 = prediction_method(X_eval_2)
     delta = y_hat_2 - y_hat
+    effects  = pd.DataFrame({"a1": a1, "delta": delta}).groupby(
+        "a1"
+    ).mean()
+    b1 = np.array(a1.value_counts(sort=False))
+    centers = (effects[:-1] + effects[1:]) / 2
     return averaged_predictions, predictions
 
 def accumulated_local_effects(estimator, X, features, *,
